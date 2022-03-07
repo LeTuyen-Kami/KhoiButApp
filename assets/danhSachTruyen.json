@@ -1,0 +1,114 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "Phàm nhân tu tiên",
+      "slug": "pham-nhan-tu-tien",
+      "Genre": {
+        "name": "Tiên hiệp",
+        "slug": "tien-hiep",
+        "id": 1
+      },
+      "summary": "Phàm Nhân Tu Tiên là một câu chuyện Tiên Hiệp kể về Hàn Lập - Một người bình thường nhưng lại gặp vô vàn cơ duyên để bước đi trên con đường tu tiên, không phải anh hùng - cũng chẳng phải tiểu nhân, Hàn Lập từng bước khẳng định mình... Liệu Hàn Lập và người yêu có thể cùng bước trên con đường tu tiên và có một cái kết hoàn mỹ? Những thử thách nào đang chờ đợi bọn họ?",
+      "cover_url": "https://static.8cache.com/cover/o/eJzLyTDT17WITwqMNNQtNKp01A_zNXY1ifQuc8301HeEghwTR_1IV8PsTO-w4HKTUP1yI0NT3QxjIyMANRgRnA==/pham-nhan-tu-tien.jpg",
+      "author": {
+        "name": "Vong Ngữ",
+        "slug": "vong-ngu"
+      },
+      "num_views": 456,
+      "num_likes": 17,
+      "numChapters": 2448,
+      "created_at": "1-1-1",
+      "updated_at": "1-1-1-",
+      "state": "Hoàn thành"
+    },
+    {
+      "id": 2,
+      "title": "Đấu phá thương khung",
+      "slug": "dau-pha-thuong-khung",
+      "Genre": {
+        "name": "Huyền huyễn",
+        "slug": "huyen-huyen",
+        "id": 2
+      },
+      "summary": "Đấu Phá Thương Khung là một câu chuyện huyền huyễn đặc sắc kể về Tiêu Viêm, một thiên chi kiêu tử với thiên phú tu luyện mà ai ai cũng hâm mộ, bỗng một ngày người mẹ mất đi đễ lại di vật là một chiếc giới chỉ màu đen nhưng từ khi đó Tiêu Viêm đã mất đi thiên phú tu luyện của mình.",
+      "cover_url": "https://static.8cache.com/cover/o/eJzLyTDT1y1Mcw2M0C0IMAvL1g9z8nUxMYwyD3Tz1HeEgmwfR_0SAzefTKOgCI8MC_1yI0NT3QxjIyMANhQRaQ==/truyen-dau-pha-thuong-khung.jpg",
+      "author": {
+        "name": "Thiên Tàm Thổ Đậu",
+        "slug": "thien-tam-tho-dau"
+      },
+      "num_views": 4156,
+      "num_likes": 173,
+      "numChapters": 1458,
+      "created_at": "1-1-1",
+      "updated_at": "1-1-1-",
+      "state": "Hoàn thành"
+    },
+    {
+      "id": 3,
+      "title": "Trọng sinh đô thị cuồng long",
+      "slug": "trong-sinh-do-thi-cuong-long",
+      "Genre": {
+        "name": "Đô thị",
+        "slug": "do-thi",
+        "id": 3
+      },
+      "summary": "- Hắn có biệt danh là Bóng(Shadow), là đệ nhất cao thủ của Long Tổ. Cũng giống như các truyện trọng sanh khác hắn bị chính chiến hữu của mình phản bội -> giết chết. Hắn trọng sanh vào một gã hoàn khố công tử là Tiêu Thu Phong là con trai duy nhất của Phong Chính tập đoàn.\n\n- Với một thân phận mới nhưng hắn vẫn còn đầy đủ trí nhớ và võ công của đời trước hắn sẽ làm gì để trả thù?? Mời các bạn đón đọc Trọng Sanh Đô Thị Cuồng Long sẽ rõ!",
+      "cover_url": "https://static.8cache.com/cover/o/eJzLyTDR1w00cTZK9U3Jzg-00A9zCjRzNcmxSHLx1HeEgcxk_VTd5OCCrMgMv-B8_XIjQ1PdDGMjIwA5rhIC/trong-sinh-do-thi-cuong-long.jpg",
+      "author": {
+        "name": "Cửu Nguyệt Dương Quang",
+        "slug": "cuu-nguyet-duong-quang"
+      },
+      "num_views": 986,
+      "num_likes": 175,
+      "numChapters": 277,
+      "created_at": "1-1123-1123",
+      "updated_at": "1-123-1-",
+      "state": "Đang ra"
+    },
+    {
+      "id": 4,
+      "title": "Hệ thống liên minh",
+      "slug": "he-thong-lien-minh",
+      "Genre": {
+        "name": "Lịch sử",
+        "slug": "lich-su",
+        "id": 4
+      },
+      "summary": "Tóm tắt nội dung Hệ Thống Liên Minh:\n\nThái Dương Tinh Hệ là một tinh hệ rộng lớn vô số tinh cầu đủ kích cỡ. Nguyên Linh đại lục nằm ở trung tâm Thái Dương Tinh Hệ, là cội nguồn, nơi sinh sống của nhân loại trong tinh hệ.\n\nMột thiếu niên từ Địa cầu mang theo hệ thống tựa game \"Liên Minh Huyền Thoại\" đi tới Nguyên Linh đại lục. Cùng dõi theo quá trình trở thành thần trong truyền thuyết của hắn tại đây.",
+      "cover_url": "https://static.8cache.com/cover/eJzLyTDWNy9xzcrzS0808c8ojMqoNA4xD4_S9Y3Idc4q80hJK_MO0S238Kxwz7QwdvRMCTPwK45ycimP8gkrrDL1iPAyrwjP9koNMQ_OsEzVTXcyq8jMK0-3LTcyNNXNMDYyAgAvVR-j/he-thong-lien-minh.jpg",
+      "author": {
+        "name": "Vong Ngữ",
+        "slug": "vong-ngu"
+      },
+      "num_views": 1456,
+      "num_likes": 174,
+      "numChapters": 448,
+      "created_at": "1-1-1",
+      "updated_at": "1-1-1-",
+      "state": "Hoàn thành"
+    },
+    {
+      "id": 5,
+      "title": "Thôn phệ tinh không",
+      "slug": "thon-phe-tinh-khong",
+      "Genre": {
+        "name": "Khoa huyễn",
+        "slug": "khoa-huyen",
+        "id": 5
+      },
+      "summary": "Đây là 1 bộ truyện mới của cà chua thuộc thể loại Khoa Ảo mới mẻ. Nhân vật chính là La Phong luôn muốn cố gắng trở thành 1 võ giả trong thế giới hiện đại tương lai đầy lạ lẫm, loại người đứng trước nguy cơ quái thú. Mở đầu câu chuyện rất hấp dẫn lôi cuốn, qua từng câu văn người đọc sẽ tự nhận biết được bối cảnh của câu chuyện.Nỗ lực, khát khao, có tình có nghĩa, lối hành văn vững chắc sẽ làm bạn nếu đã đọc liền k thể rời mắt, vẫn là cà chua, hãy theo La Phong của chúng ta khám phá ra thế giới vô tận trong vũ trụ tinh không nhé",
+      "cover_url": "https://static.8cache.com/cover/o/eJzLyTDV13XJswgwSbUwdnOx0A_zcvLxqAx2iyjw1HeEgpwUV_2SXDfLyBKLEKdAV_1yI0NT3QxjIyMAMgARpA==/thon-phe-tinh-khong.jpg",
+      "author": {
+        "name": "Ngã Cật Tây Hồng Thị",
+        "slug": "nga-cat-tay-hong-thi"
+      },
+      "num_views": 1234,
+      "num_likes": 173,
+      "numChapters": 1789,
+      "created_at": "1-1-1",
+      "updated_at": "1-1-1-",
+      "state": "Hoàn thành"
+    }
+  ]
+}
