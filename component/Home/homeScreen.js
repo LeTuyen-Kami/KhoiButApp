@@ -8,26 +8,25 @@ import {
   ActivityIndicator,
   View,
   ScrollView,
-  Animated,
+  TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Truyen from '../child/truyen';
-// import Carousel, {
-//   withCarouselContext,
-//   useCarouselContext,
-// } from '@r0b0t3d/react-native-carousel';
 const screen = Dimensions.get('window');
-export default function HomeScreen() {
+export default function HomeScreen(props) {
   const [isLoading, setLoading] = React.useState(true);
   const [data, setData] = React.useState([]);
+  const [defaultData, setDefaultData] = React.useState([]);
   const [danhSachTruyen, setDanhSachTruyen] = React.useState([]);
   const [aspectRatio, setaspectRatio] = React.useState(1);
   const [flatList, setFlatList] = React.useState(null);
-  const [currentOffset, setCurrenOffset] = React.useState(1);
+  const [currentOffset, setCurrenOffset] = React.useState(0);
   //Lấy dữ liệu khi bắt đầu
   React.useEffect(() => {
     let dataimage = require('../../assets/image.json').data;
-    setData([dataimage[dataimage.length - 1], ...dataimage, dataimage[0]]);
+    setData(dataimage);
+    setDefaultData(dataimage);
     setDanhSachTruyen(require('../../assets/danhSachTruyen.json'));
     setLoading(false);
   }, []);
@@ -36,24 +35,36 @@ export default function HomeScreen() {
     const interval = setInterval(() => {
       //get current scroll position
       if (flatList !== null) {
-        if (currentOffset < data.length - 1) {
-          setCurrenOffset(prev => prev + 1);
-          flatList.scrollToIndex({
-            index: currentOffset,
-            animated: true,
-          });
-        } else {
-          setCurrenOffset(1);
-          flatList.scrollToIndex({
-            index: currentOffset,
-            animated: true,
-          });
+        //console.log(flatList.current.scrollProperties.offset);
+        // if (currentOffset < data.length - 1) {
+        //   // setCurrenOffset(prev => prev + 1);
+        //   flatList.scrollToIndex({
+        //     index: currentOffset,
+        //     animated: true,
+        //   });
+        // } else {
+        //   // setCurrenOffset(1);
+        //   flatList.scrollToIndex({
+        //     index: currentOffset,
+        //     animated: true,
+        //   });
+        // }
+        if (currentOffset > 30) {
+          setData(defaultData);
+          setCurrenOffset(0);
         }
+        try {
+          flatList.scrollToIndex({
+            index: currentOffset + 1,
+            animated: true,
+          });
+        } catch (e) {}
       }
-    }, 5000);
+    }, 3000);
     return () => {
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, flatList, currentOffset]);
 
   return (
@@ -62,37 +73,23 @@ export default function HomeScreen() {
         {isLoading ? (
           <ActivityIndicator />
         ) : (
-          <Animated.FlatList
+          <FlatList
             data={data}
             horizontal
             ref={ref => {
               setFlatList(ref);
             }}
+            onScroll={event => {
+              setCurrenOffset(
+                Math.floor(event.nativeEvent.contentOffset.x / screen.width) +
+                  1,
+              );
+            }}
+            scrollEventThrottle={160}
             // khi scroll thì set currentOffset
-            onScroll={e => {
-              if (
-                Math.floor(
-                  (e.nativeEvent.contentOffset.x + 1) / (screen.width - 30),
-                ) ===
-                data.length - 1
-              ) {
-                setCurrenOffset(1);
-                flatList.scrollToIndex({
-                  index: currentOffset,
-                  animated: true,
-                });
-              }
-              if (
-                Math.floor(
-                  (e.nativeEvent.contentOffset.x + 1) / (screen.width - 30),
-                ) === 0
-              ) {
-                setCurrenOffset(data.length - 2);
-                flatList.scrollToIndex({
-                  index: currentOffset,
-                  animated: true,
-                });
-              }
+            onEndReachedThreshold={0.3}
+            onEndReached={() => {
+              setData([...data, ...data]);
             }}
             keyExtractor={(item, index) => index.toString()}
             pagingEnabled={true}
@@ -110,6 +107,7 @@ export default function HomeScreen() {
                   );
                 }}
                 source={{uri: item.imageUrl}}
+                // eslint-disable-next-line react-native/no-inline-styles
                 style={{
                   width: screen.width - 30,
                   aspectRatio: aspectRatio,
@@ -122,23 +120,23 @@ export default function HomeScreen() {
       </View>
       <View style={styles.box2}>
         <View style={styles.containerIcon}>
-          <Icon name="home" size={30} color="#64B5F6" />
+          <Icon name="apps" size={30} color="#64B5F6" />
           <Text style={styles.textIcon}>Thể loại</Text>
         </View>
         <View style={styles.containerIcon}>
-          <Icon name="home" size={30} color="#E57373" />
+          <Icon name="chart-bar" size={30} color="#E57373" />
           <Text style={styles.textIcon}>Xếp hạng</Text>
         </View>
         <View style={styles.containerIcon}>
-          <Icon name="home" size={30} color="#66BB6A" />
+          <MaterialIcon name="library-books" size={30} color="#66BB6A" />
           <Text style={styles.textIcon}>Truyện mới</Text>
         </View>
         <View style={styles.containerIcon}>
-          <Icon name="home" size={30} color="#F9A825" />
+          <MaterialIcon name="military-tech" size={30} color="#F9A825" />
           <Text style={styles.textIcon}>Truyện full</Text>
         </View>
         <View style={styles.containerIcon}>
-          <Icon name="home" size={30} color="#7582C5" />
+          <Icon name="diamond-stone" size={30} color="#7582C5" />
           <Text style={styles.textIcon}>Truyện vip</Text>
         </View>
       </View>
@@ -157,11 +155,18 @@ export default function HomeScreen() {
           horizontal
           renderItem={({item}) => {
             return (
-              <Truyen
-                image_url={item.cover_url}
-                title={item.title}
-                numChapters={item.numChapters}
-              />
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('HomeDetail', {
+                    item: item,
+                  })
+                }>
+                <Truyen
+                  image_url={item.cover_url}
+                  title={item.title}
+                  numChapters={item.numChapters}
+                />
+              </TouchableOpacity>
             );
           }}
         />
@@ -181,11 +186,18 @@ export default function HomeScreen() {
           horizontal
           renderItem={({item}) => {
             return (
-              <Truyen
-                image_url={item.cover_url}
-                title={item.title}
-                numChapters={item.numChapters}
-              />
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('HomeDetail', {
+                    item: item,
+                  })
+                }>
+                <Truyen
+                  image_url={item.cover_url}
+                  title={item.title}
+                  numChapters={item.numChapters}
+                />
+              </TouchableOpacity>
             );
           }}
         />
@@ -205,11 +217,18 @@ export default function HomeScreen() {
           horizontal
           renderItem={({item}) => {
             return (
-              <Truyen
-                image_url={item.cover_url}
-                title={item.title}
-                numChapters={item.numChapters}
-              />
+              <TouchableOpacity
+                onPress={() =>
+                  props.navigation.navigate('HomeDetail', {
+                    item: item,
+                  })
+                }>
+                <Truyen
+                  image_url={item.cover_url}
+                  title={item.title}
+                  numChapters={item.numChapters}
+                />
+              </TouchableOpacity>
             );
           }}
         />
@@ -223,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 15,
   },
-
+  box1: {},
   box2: {
     flexDirection: 'row',
     justifyContent: 'space-between',

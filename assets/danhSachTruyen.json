@@ -18,6 +18,7 @@
       "num_views": 456,
       "num_likes": 17,
       "numChapters": 2448,
+      "numRatings": 5,
       "created_at": "1-1-1",
       "updated_at": "1-1-1-",
       "state": "Hoàn thành"
@@ -40,6 +41,7 @@
       "num_views": 4156,
       "num_likes": 173,
       "numChapters": 1458,
+      "numRatings": 5,
       "created_at": "1-1-1",
       "updated_at": "1-1-1-",
       "state": "Hoàn thành"
@@ -62,6 +64,7 @@
       "num_views": 986,
       "num_likes": 175,
       "numChapters": 277,
+      "numRatings": 3,
       "created_at": "1-1123-1123",
       "updated_at": "1-123-1-",
       "state": "Đang ra"
@@ -84,6 +87,7 @@
       "num_views": 1456,
       "num_likes": 174,
       "numChapters": 448,
+      "numRatings": 4,
       "created_at": "1-1-1",
       "updated_at": "1-1-1-",
       "state": "Hoàn thành"
@@ -106,6 +110,7 @@
       "num_views": 1234,
       "num_likes": 173,
       "numChapters": 1789,
+      "numRatings": 4,
       "created_at": "1-1-1",
       "updated_at": "1-1-1-",
       "state": "Hoàn thành"

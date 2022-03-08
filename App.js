@@ -12,10 +12,60 @@ import RankingScreen from './component/Ranking/rankingScreen';
 import AccountScreen from './component/Account/accountScreen';
 import CreateScreen from './component/Create/createScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
-
+// import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import HomeDetail from './component/Home/homeDetail';
 import HomeHeader from './component/Home/homeHeader';
 const size = 30;
+
+const Stack = createStackNavigator();
+
+function HomeStack(props) {
+  React.useLayoutEffect(() => {
+    const routeName = getFocusedRouteNameFromRoute(props.route);
+    if (routeName === 'HomeDetail') {
+      props.navigation.setOptions({
+        tabBarStyle: {display: 'none'},
+      });
+    } else {
+      props.navigation.setOptions({
+        tabBarStyle: {display: 'flex'},
+      });
+    }
+  }, [props.navigation, props.route]);
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+      }}>
+      <Stack.Screen
+        options={{
+          headerTitle: () => <HomeHeader />,
+          headerStyle: {
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+
+            elevation: 5,
+          },
+        }}
+        name="HomeScreen"
+        component={HomeScreen}
+      />
+      <Stack.Screen
+        name="HomeDetail"
+        component={HomeDetail}
+        options={{
+          title: '',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 function App() {
   return (
@@ -26,6 +76,7 @@ function App() {
             tabBarInactiveTintColor: '#7f8c8d',
             tabBarActiveTintColor: '#2ecc71',
             tabBarLabel: navigation.isFocused() ? route.name : '',
+            headerShown: false,
             tabBarLabelStyle: {
               fontSize: 15,
             },
@@ -33,23 +84,8 @@ function App() {
         }}>
         <Tab.Screen
           name="Home"
-          component={HomeScreen}
+          component={HomeStack}
           options={{
-            title: 'Khởi bút',
-            headerTitleStyle: {
-              fontSize: size,
-            },
-            headerRight: () => (
-              <AntDesignIcon
-                // eslint-disable-next-line react-native/no-inline-styles
-                style={{
-                  marginRight: 10,
-                }}
-                name="search1"
-                size={30}
-                color="black"
-              />
-            ),
             tabBarIcon: ({color}) => (
               <Icon name="home" size={size} color={color} />
             ),
