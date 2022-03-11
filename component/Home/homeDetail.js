@@ -6,12 +6,14 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
+  FlatList,
   Dimensions,
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import AntdesignIcon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {Chuong} from '../child/Chuong';
 
 const screenWidth = Dimensions.get('window').width;
 const ShowRating = rate => {
@@ -28,7 +30,49 @@ const ShowRating = rate => {
 };
 
 function HomeDetail(props) {
+  const [data, setData] = React.useState([]);
+  const [size, setSize] = React.useState([200, 'flex']);
   const item = props.route.params.item;
+  React.useEffect(() => {
+    switch (item.slug) {
+      case 'dau-pha-thuong-khung':
+        setData(
+          require('../../assets/danhSachChuong/dau-pha-thuong-khung-chuong.json')
+            .data,
+        );
+        break;
+      case 'he-thong-lien-minh':
+        setData(
+          require('../../assets/danhSachChuong/he-thong-lien-minh-chuong.json')
+            .data,
+        );
+        break;
+      case 'pham-nhan-tu-tien':
+        setData(
+          require('../../assets/danhSachChuong/pham-nhan-tu-tien-chuong.json')
+            .data,
+        );
+        break;
+      case 'thon-phe-tinh-khong':
+        setData(
+          require('../../assets/danhSachChuong/thon-phe-tinh-khong-chuong.json')
+            .data,
+        );
+        break;
+      case 'trong-sinh-do-thi-cuong-long':
+        setData(
+          require('../../assets/danhSachChuong/trong-sinh-do-thi-cuong-long-chuong.json')
+            .data,
+        );
+        break;
+      default:
+        setData(
+          require('../../assets/danhSachChuong/pham-nhan-tu-tien-chuong.json')
+            .data,
+        );
+        break;
+    }
+  }, [item]);
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -66,7 +110,11 @@ function HomeDetail(props) {
               </View>
             </View>
             <View style={styles.box1}>
-              <TouchableOpacity style={styles.readButton}>
+              <TouchableOpacity
+                style={styles.readButton}
+                onPress={() =>
+                  props.navigation.navigate('HomeReadNovel', {item: data[0]})
+                }>
                 <Icon name="play" size={20} color="white" />
                 <Text
                   style={[styles.textSize20, styles.bold, styles.textWhite]}>
@@ -128,41 +176,50 @@ function HomeDetail(props) {
             <Text style={styles.textSize15}>Tiếp Cận</Text>
           </View>
         </View>
-        <View style={styles.starWrap}>
+        <View style={[styles.starWrap, {height: size[0], overflow: 'hidden'}]}>
           <Text style={[styles.textSize20, styles.bold]}>
             Giới Thiệu Truyện
           </Text>
           <Text style={[styles.textSize15]}>{item.summary}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              setSize([null, 'none']);
+            }}
+            style={{
+              position: 'absolute',
+              top: 165,
+              alignItems: 'center',
+              backgroundColor: '#fff',
+              padding: 5,
+              width: '100%',
+              margin: 5,
+              borderTopColor: 'rgba(0,0,0,0.1)',
+              borderTopWidth: 1,
+              display: size[1],
+            }}>
+            <Icon name="angle-down" size={20} color="black" />
+          </TouchableOpacity>
         </View>
         <View style={styles.starWrap}>
           <Text style={[styles.textSize20, styles.bold]}>
             Chương Mới Cập Nhật
           </Text>
-          <TouchableOpacity>
-            <View style={styles.chuong}>
-              <View>
-                <Text style={[styles.textSize15, styles.bold]}>Đầu Tiên</Text>
-                <Text style={[styles.textSize15]}>xx giờ trước</Text>
-              </View>
-              <View style={[styles.box1, styles.center]}>
-                <Text style={[styles.textSize15, styles.bold]}>Chương 1 </Text>
-                <Icon name="chevron-right" size={15} color="black" />
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.chuong}>
-              <View>
-                <Text style={[styles.textSize15, styles.bold]}>Thứ 2</Text>
-                <Text style={[styles.textSize15]}>xx giờ trước</Text>
-              </View>
-              <View style={[styles.box1, styles.center]}>
-                <Text style={[styles.textSize15, styles.bold]}>Chương 2 </Text>
-                <Icon name="chevron-right" size={15} color="black" />
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonDsc}>
+          {data
+            .slice()
+            .reverse()
+            .slice(0, 5)
+            .map((item1, index) => (
+              <Chuong item={item1} key={index} {...props} />
+            ))}
+
+          <TouchableOpacity
+            style={styles.buttonDsc}
+            onPress={() => {
+              props.navigation.navigate('HomeListChapter', {
+                item: item,
+                data: data,
+              });
+            }}>
             <Text style={[styles.textSize15, styles.bold, styles.textWhite]}>
               Danh Sách Chương
             </Text>

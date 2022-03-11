@@ -31,41 +31,41 @@ export default function HomeScreen(props) {
     setLoading(false);
   }, []);
   //Tự động scroll khi đủ dữ liệu
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      //get current scroll position
-      if (flatList !== null) {
-        //console.log(flatList.current.scrollProperties.offset);
-        // if (currentOffset < data.length - 1) {
-        //   // setCurrenOffset(prev => prev + 1);
-        //   flatList.scrollToIndex({
-        //     index: currentOffset,
-        //     animated: true,
-        //   });
-        // } else {
-        //   // setCurrenOffset(1);
-        //   flatList.scrollToIndex({
-        //     index: currentOffset,
-        //     animated: true,
-        //   });
-        // }
-        if (currentOffset > 30) {
-          setData(defaultData);
-          setCurrenOffset(0);
-        }
-        try {
-          flatList.scrollToIndex({
-            index: currentOffset + 1,
-            animated: true,
-          });
-        } catch (e) {}
-      }
-    }, 3000);
-    return () => {
-      clearInterval(interval);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, flatList, currentOffset]);
+  // React.useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     //get current scroll position
+  //     if (flatList !== null) {
+  //       //console.log(flatList.current.scrollProperties.offset);
+  //       // if (currentOffset < data.length - 1) {
+  //       //   // setCurrenOffset(prev => prev + 1);
+  //       //   flatList.scrollToIndex({
+  //       //     index: currentOffset,
+  //       //     animated: true,
+  //       //   });
+  //       // } else {
+  //       //   // setCurrenOffset(1);
+  //       //   flatList.scrollToIndex({
+  //       //     index: currentOffset,
+  //       //     animated: true,
+  //       //   });
+  //       // }
+  //       if (currentOffset > 30) {
+  //         setData(defaultData);
+  //         setCurrenOffset(0);
+  //       }
+  //       try {
+  //         flatList.scrollToIndex({
+  //           index: currentOffset + 1,
+  //           animated: true,
+  //         });
+  //       } catch (e) {}
+  //     }
+  //   }, 3000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [data, flatList, currentOffset]);
 
   return (
     <ScrollView style={styles.container}>
@@ -79,13 +79,13 @@ export default function HomeScreen(props) {
             ref={ref => {
               setFlatList(ref);
             }}
-            onScroll={event => {
-              setCurrenOffset(
-                Math.floor(event.nativeEvent.contentOffset.x / screen.width) +
-                  1,
-              );
-            }}
-            scrollEventThrottle={160}
+            // onScroll={event => {
+            //   setCurrenOffset(
+            //     Math.floor(event.nativeEvent.contentOffset.x / screen.width) +
+            //       1,
+            //   );
+            // }}
+            // scrollEventThrottle={160}
             // khi scroll thì set currentOffset
             onEndReachedThreshold={0.3}
             onEndReached={() => {
