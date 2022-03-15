@@ -5,7 +5,7 @@ import HomeDetail from './homeDetail';
 import HomeListChapter from './homeListChapter';
 import HomeListChapterHeader from './homeListChapterHeader';
 import HomeHeader from './homeHeader';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {View, NativeBaseProvider} from 'native-base';
 import HomeReadNovel from './homeReadNovel';
@@ -31,25 +31,12 @@ export default function HomeStack(props) {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
-      }}>
-      <Stack.Screen
-        options={{
-          headerTitle: () => <HomeHeader />,
-          headerStyle: {
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-
-            elevation: 5,
-          },
-        }}
-        name="HomeScreen"
-        component={HomeScreen}
-      />
+        gestureEnabled: true,
+        gestureDirection: 'horizontal',
+        cardOverlayEnabled: true,
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
+      initialRouteName="HomeScreen">
       <Stack.Screen
         name="HomeDetail"
         component={HomeDetail}
@@ -67,6 +54,24 @@ export default function HomeStack(props) {
             </NativeBaseProvider>
           ),
         }}
+      />
+      <Stack.Screen
+        options={{
+          headerTitle: () => <HomeHeader />,
+          headerStyle: {
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+
+            elevation: 5,
+          },
+        }}
+        name="HomeScreen"
+        component={HomeScreen}
       />
       <Stack.Screen
         name="HomeListChapter"

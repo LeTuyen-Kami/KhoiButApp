@@ -6,15 +6,15 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  FlatList,
   Dimensions,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import AntdesignIcon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Chuong} from '../child/Chuong';
-
+import RenderHtml from 'react-native-render-html';
 const screenWidth = Dimensions.get('window').width;
 const ShowRating = rate => {
   let result = [];
@@ -32,53 +32,45 @@ const ShowRating = rate => {
 function HomeDetail(props) {
   const [data, setData] = React.useState([]);
   const [size, setSize] = React.useState([200, 'flex']);
-  const item = props.route.params.item;
+  const [item, setItem] = React.useState([]);
+  const [isLoading, setLoading] = React.useState(true);
+  const [isLoading1, setLoading1] = React.useState(true);
   React.useEffect(() => {
-    switch (item.slug) {
-      case 'dau-pha-thuong-khung':
-        setData(
-          require('../../assets/danhSachChuong/dau-pha-thuong-khung-chuong.json')
-            .data,
-        );
-        break;
-      case 'he-thong-lien-minh':
-        setData(
-          require('../../assets/danhSachChuong/he-thong-lien-minh-chuong.json')
-            .data,
-        );
-        break;
-      case 'pham-nhan-tu-tien':
-        setData(
-          require('../../assets/danhSachChuong/pham-nhan-tu-tien-chuong.json')
-            .data,
-        );
-        break;
-      case 'thon-phe-tinh-khong':
-        setData(
-          require('../../assets/danhSachChuong/thon-phe-tinh-khong-chuong.json')
-            .data,
-        );
-        break;
-      case 'trong-sinh-do-thi-cuong-long':
-        setData(
-          require('../../assets/danhSachChuong/trong-sinh-do-thi-cuong-long-chuong.json')
-            .data,
-        );
-        break;
-      default:
-        setData(
-          require('../../assets/danhSachChuong/pham-nhan-tu-tien-chuong.json')
-            .data,
-        );
-        break;
-    }
-  }, [item]);
-  return (
+    let unmounted = true;
+    fetch(
+      'https://test.khoibut.com/api/next/novel-detail-info/?slug=truyen-moi-sang-tac',
+    )
+      .then(res => res.json())
+      .then(res => {
+        if (unmounted) {
+          setItem(res.data);
+          setLoading(false);
+        }
+      })
+      .catch(err => console.log(err));
+    fetch(
+      'https://test.khoibut.com/api/next/chapter-list/?slug=truyen-moi-sang-tac',
+    )
+      .then(res => res.json())
+      .then(res => {
+        if (unmounted) {
+          setData(res.data[0].items);
+          setLoading1(false);
+        }
+      })
+      .catch(err => console.log(err));
+    return () => {
+      unmounted = false;
+    };
+  }, []);
+  return isLoading ? (
+    <ActivityIndicator size="large" color="#0000ff" />
+  ) : (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.box1}>
           <ImageBackground
-            source={{uri: item.cover_url}}
+            source={{uri: item.coverUrl}}
             resizeMode="cover"
             blurRadius={5}
             style={{
@@ -88,8 +80,10 @@ function HomeDetail(props) {
             }}>
             <View style={styles.box1}>
               <View style={styles.box1_1}>
-                <Image source={{uri: item.cover_url}} style={styles.image} />
-                <View style={styles.box1}>{ShowRating(item.numRatings)}</View>
+                <Image source={{uri: item.coverUrl}} style={styles.image} />
+                <View style={styles.box1}>
+                  {ShowRating(item.rateInfo.numRates)}
+                </View>
               </View>
               <View style={styles.box1_2}>
                 <Text style={[styles.title, styles.textWhite]}>
@@ -100,11 +94,13 @@ function HomeDetail(props) {
                 </View>
                 <View style={styles.box1}>
                   <View style={[styles.Genre, styles.borderBox]}>
-                    <Text style={styles.textWhite}>{item.Genre.name}</Text>
+                    <Text style={styles.textWhite}>
+                      {item.primaryGenre.name}
+                    </Text>
                   </View>
                   <View
                     style={[styles.state, styles.borderBox, styles.marginLeft]}>
-                    <Text style={styles.textWhite}>{item.state}</Text>
+                    <Text style={styles.textWhite}>{item.novelStatus}</Text>
                   </View>
                 </View>
               </View>
@@ -113,7 +109,12 @@ function HomeDetail(props) {
               <TouchableOpacity
                 style={styles.readButton}
                 onPress={() =>
-                  props.navigation.navigate('HomeReadNovel', {item: data[0]})
+                  props.navigation.navigate('HomeReadNovel', {
+                    item: 1,
+                    data: data,
+                    slug: 'truyen-moi-sang-tac',
+                    chitietTruyen: item,
+                  })
                 }>
                 <Icon name="play" size={20} color="white" />
                 <Text
@@ -149,7 +150,7 @@ function HomeDetail(props) {
               },
             ]}>
             <Text style={[styles.textSize20, styles.bold]}>
-              {item.num_views}
+              {item.numViews}
             </Text>
             <Text style={styles.textSize15}>Lượt Xem</Text>
           </View>
@@ -165,22 +166,35 @@ function HomeDetail(props) {
               },
             ]}>
             <Text style={[styles.textSize20, styles.bold]}>
-              {item.num_likes}
+              {item.numLikes}
             </Text>
             <Text style={styles.textSize15}>Lượt Thích</Text>
           </View>
           <View style={styles.center}>
             <Text style={[styles.textSize20, styles.bold]}>
-              {item.num_views + Math.floor(Math.random() * 1000)}
+              {item.numViews + Math.floor(Math.random() * 1000)}
             </Text>
             <Text style={styles.textSize15}>Tiếp Cận</Text>
           </View>
         </View>
-        <View style={[styles.starWrap, {height: size[0], overflow: 'hidden'}]}>
+        <View
+          style={[styles.starWrap, {overflow: 'hidden', maxHeight: size[0]}]}>
           <Text style={[styles.textSize20, styles.bold]}>
             Giới Thiệu Truyện
           </Text>
-          <Text style={[styles.textSize15]}>{item.summary}</Text>
+          <RenderHtml
+            source={{
+              html: item.summary,
+            }}
+            contentWidth={screenWidth - 20}
+            tagsStyles={{
+              p: {
+                fontSize: 16,
+                lineHeight: 20,
+                color: '#000',
+              },
+            }}
+          />
           <TouchableOpacity
             onPress={() => {
               setSize([null, 'none']);
@@ -200,24 +214,36 @@ function HomeDetail(props) {
             <Icon name="angle-down" size={20} color="black" />
           </TouchableOpacity>
         </View>
+
         <View style={styles.starWrap}>
           <Text style={[styles.textSize20, styles.bold]}>
             Chương Mới Cập Nhật
           </Text>
-          {data
-            .slice()
-            .reverse()
-            .slice(0, 5)
-            .map((item1, index) => (
-              <Chuong item={item1} key={index} {...props} />
-            ))}
-
+          {isLoading1 ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : (
+            data
+              .slice()
+              .reverse()
+              .slice(0, 5)
+              .map((item1, index) => (
+                <Chuong
+                  slug={'truyen-moi-sang-tac'}
+                  data={data}
+                  item={item1}
+                  key={index}
+                  chitietTruyen={item}
+                  {...props}
+                />
+              ))
+          )}
           <TouchableOpacity
             style={styles.buttonDsc}
             onPress={() => {
               props.navigation.navigate('HomeListChapter', {
-                item: item,
-                data: data,
+                item: item, //chi tiết truyện
+                data: data, //danh sách chương
+                slug: 'truyen-moi-sang-tac',
               });
             }}>
             <Text style={[styles.textSize15, styles.bold, styles.textWhite]}>

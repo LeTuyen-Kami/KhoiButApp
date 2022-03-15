@@ -8,7 +8,10 @@ export function Chuong(props) {
       <Pressable
         onPress={() => {
           props.navigation.navigate('HomeReadNovel', {
-            item: props.item,
+            item: props.item.chapNum,
+            data: props.data,
+            slug: props.slug,
+            chitietTruyen: props.chitietTruyen,
           });
         }}>
         {({isPressed}) => {
@@ -23,10 +26,10 @@ export function Chuong(props) {
               alignItems="center"
               bg={isPressed ? 'warmGray.300' : 'rgba(255,255,255,0.7)'}>
               <Text w="45px" fontSize="20">
-                {props.item.name.split(':')[0].replace('Chương', '')}
+                {props.item.chapNum}
               </Text>
               <Text numberOfLines={1} fontSize={17} w="4/6">
-                {props.item.name.split(':')[1].trim()}
+                {props.item.chapTitle}
               </Text>
               <Icon
                 style={{

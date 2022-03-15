@@ -10,7 +10,9 @@ function HomeListChapter(props) {
       <View bg="white">
         <FlatList
           data={data.slice(0, numslice + 20)}
-          renderItem={({item}) => <Chuong item={item} {...props} />}
+          renderItem={({item, index}) => (
+            <Chuong data={data} index={index} item={item} {...props} />
+          )}
           onEndReachedThreshold={0.1}
           keyExtractor={(item, index) => index.toString()}
           onEndReached={() => {
