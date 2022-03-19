@@ -7,7 +7,7 @@ export default function RankingScreen() {
       <View style={styles.box}>
         <Text>RankingScreen</Text>
       </View>
-      <Text style={{zIndex: 1}}>RankingScreen</Text>
+      <Text style={{zIndex: 1, fontFamily: 'TP Han Zi'}}>RankingScreen</Text>
     </View>
   );
 }

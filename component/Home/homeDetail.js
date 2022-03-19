@@ -15,6 +15,8 @@ import AntdesignIcon from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Chuong} from '../child/Chuong';
 import RenderHtml from 'react-native-render-html';
+import {connect} from 'react-redux';
+
 const screenWidth = Dimensions.get('window').width;
 const ShowRating = rate => {
   let result = [];
@@ -35,6 +37,8 @@ function HomeDetail(props) {
   const [item, setItem] = React.useState([]);
   const [isLoading, setLoading] = React.useState(true);
   const [isLoading1, setLoading1] = React.useState(true);
+  const saveListChapter = props.saveListChapter;
+  const saveItem = props.saveItem;
   React.useEffect(() => {
     let unmounted = true;
     fetch(
@@ -44,6 +48,7 @@ function HomeDetail(props) {
       .then(res => {
         if (unmounted) {
           setItem(res.data);
+          saveItem(res.data);
           setLoading(false);
         }
       })
@@ -55,6 +60,7 @@ function HomeDetail(props) {
       .then(res => {
         if (unmounted) {
           setData(res.data[0].items);
+          saveListChapter(res.data[0].items);
           setLoading1(false);
         }
       })
@@ -62,6 +68,7 @@ function HomeDetail(props) {
     return () => {
       unmounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return isLoading ? (
     <ActivityIndicator size="large" color="#0000ff" />
@@ -111,9 +118,7 @@ function HomeDetail(props) {
                 onPress={() =>
                   props.navigation.navigate('HomeReadNovel', {
                     item: 1,
-                    data: data,
                     slug: 'truyen-moi-sang-tac',
-                    chitietTruyen: item,
                   })
                 }>
                 <Icon name="play" size={20} color="white" />
@@ -229,10 +234,8 @@ function HomeDetail(props) {
               .map((item1, index) => (
                 <Chuong
                   slug={'truyen-moi-sang-tac'}
-                  data={data}
                   item={item1}
                   key={index}
-                  chitietTruyen={item}
                   {...props}
                 />
               ))
@@ -241,7 +244,6 @@ function HomeDetail(props) {
             style={styles.buttonDsc}
             onPress={() => {
               props.navigation.navigate('HomeListChapter', {
-                item: item, //chi tiết truyện
                 data: data, //danh sách chương
                 slug: 'truyen-moi-sang-tac',
               });
@@ -400,4 +402,20 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
 });
-export default HomeDetail;
+export default connect(
+  state => ({}),
+  dispatch => ({
+    saveListChapter: data => {
+      dispatch({
+        type: 'CHANGE_LIST_CHAPTER',
+        payload: data,
+      });
+    },
+    saveItem: data => {
+      dispatch({
+        type: 'CHANGE_ITEM',
+        payload: data,
+      });
+    },
+  }),
+)(HomeDetail);

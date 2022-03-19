@@ -1,20 +1,23 @@
 import React from 'react';
-import {FlatList, NativeBaseProvider, View, Text} from 'native-base';
+import {FlatList, NativeBaseProvider, View} from 'native-base';
 import ReadNovel from './readNovel';
 import {Dimensions, Animated} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-
 const screen = Dimensions.get('window');
 const AnimatedView = Animated.createAnimatedComponent(View);
+import CustomIcon from '../../component/child/Icon';
+import {connect} from 'react-redux';
+import IconBorder from '../../component/child/IconBorder';
+import CustomText from '../../component/child/customText';
 
 function HomeReadNovel(props) {
   const defautlOffset = React.useRef(0);
-  const defaultData = props.route.params.data; //danh sách chương
+  const defaultData = props.listChapter; //danh sách chương
   const defaultItem = props.route.params.item - 1; //số chương bắt đầu từ 0
-  const chitietTruyen = props.route.params.chitietTruyen; //truyện đang đọc
   const flatListRef = React.useRef(null);
   const currenPage = React.useRef(defaultItem);
-  const offsetTopAndBottom = React.useRef(new Animated.Value(-50)).current;
+  const offsetTopAndBottom = React.useRef(new Animated.Value(1)).current;
+  const offsetTopAndBottomSetting = React.useRef(new Animated.Value(0)).current;
+  const defautlOffsetSetting = React.useRef(1);
   const AnimationShow = () => {
     Animated.spring(offsetTopAndBottom, {
       toValue: defautlOffset.current,
@@ -22,6 +25,31 @@ function HomeReadNovel(props) {
       bounciness: 10,
       useNativeDriver: true,
     }).start();
+  };
+  const AnimationShowSetting = () => {
+    Animated.parallel([
+      Animated.spring(offsetTopAndBottom, {
+        toValue: defautlOffsetSetting.current,
+        duration: 300,
+        bounciness: 10,
+        useNativeDriver: true,
+      }),
+      Animated.spring(offsetTopAndBottomSetting, {
+        toValue: defautlOffsetSetting.current,
+        duration: 300,
+        bounciness: 10,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+  const changeCurrenPage = page => {
+    console.log('changeCurrenPage', page);
+    currenPage.current = page;
+    flatListRef.current.scrollToIndex({
+      index: currenPage.current,
+      animated: true,
+    });
+    props.changeChapTitle(defaultData[page].chapTitle);
   };
   return (
     <NativeBaseProvider>
@@ -32,9 +60,8 @@ function HomeReadNovel(props) {
         horizontal
         maxToRenderPerBatch={3}
         removeClippedSubviews={true}
-        decelerationRate={0.7}
         windowSize={3}
-        initialNumToRender={3}
+        initialNumToRender={0}
         getItemLayout={(data, index) => ({
           length: screen.width,
           offset: screen.width * index,
@@ -45,15 +72,22 @@ function HomeReadNovel(props) {
         renderItem={({item, index}) => <ReadNovel item={item} {...props} />}
         keyExtractor={(item, index) => index.toString()}
         onTouchEnd={() => {
-          AnimationShow();
-          defautlOffset.current === 0
-            ? (defautlOffset.current = -50)
-            : (defautlOffset.current = 0);
+          if (defautlOffsetSetting.current === 0) {
+            AnimationShowSetting();
+            defautlOffsetSetting.current = 1;
+          } else {
+            AnimationShow();
+            defautlOffset.current === 0
+              ? (defautlOffset.current = 1)
+              : (defautlOffset.current = 0);
+          }
         }}
         onMomentumScrollEnd={e => {
           const offset = e.nativeEvent.contentOffset.x;
           const index = Math.round(offset / screen.width);
           currenPage.current = index;
+          props.changeCurrenPageRedux(index);
+          props.changeChapTitle(defaultData[index].chapTitle);
         }}
       />
       <AnimatedView
@@ -63,7 +97,10 @@ function HomeReadNovel(props) {
         style={{
           transform: [
             {
-              translateY: offsetTopAndBottom,
+              translateY: offsetTopAndBottom.interpolate({
+                inputRange: [0, 1, 2],
+                outputRange: [0, -50, 0],
+              }),
             },
           ],
         }}
@@ -75,25 +112,72 @@ function HomeReadNovel(props) {
         justifyContent={'space-between'}
         alignItems={'center'}
         zIndex={2}>
-        <Icon
-          onPress={() => {
+        <IconBorder
+          name={'md-arrow-back-sharp'}
+          size={30}
+          press={() => {
             props.navigation.goBack();
           }}
-          name="md-arrow-back-sharp"
-          size={30}
+          {...props}
         />
-        <Text isTruncated w={'70%'}>
-          Chaptitle
-        </Text>
-        <Icon
-          name="settings-outline"
+        <CustomText
+          firstChapTitle={defaultData[defaultItem].chapTitle}
+          isTruncated
+          w={'70%'}
+          fontSize={20}
+          fontWeight={'bold'}
+          ml={2}
+        />
+        <IconBorder
+          name={'menu'}
           size={30}
-          onPress={() => {
+          press={() => {
             props.navigation.replace('HomeListChapter', {
               data: defaultData,
-              item: chitietTruyen,
             });
           }}
+          {...props}
+        />
+      </AnimatedView>
+      <AnimatedView
+        position={'absolute'}
+        bottom={-200}
+        left={0}
+        style={{
+          transform: [
+            {
+              translateY: offsetTopAndBottomSetting.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, -200],
+              }),
+            },
+          ],
+        }}
+        w={screen.width - 2}
+        px={2}
+        height={200}
+        bg="white"
+        flexDirection={'row'}
+        justifyContent={'space-around'}
+        alignItems={'center'}
+        zIndex={2}>
+        <CustomIcon
+          name="arrow-back-circle"
+          size={30}
+          page={currenPage.current}
+          isNext={false}
+          changePage={changeCurrenPage}
+          dataLength={defaultData.length - 1}
+        />
+
+        <IconBorder name="settings" size={30} press={() => {}} />
+        <CustomIcon
+          name="arrow-forward-circle"
+          size={30}
+          page={currenPage.current}
+          isNext={true}
+          changePage={changeCurrenPage}
+          dataLength={defaultData.length - 1}
         />
       </AnimatedView>
       <AnimatedView
@@ -104,8 +188,8 @@ function HomeReadNovel(props) {
           transform: [
             {
               translateY: offsetTopAndBottom.interpolate({
-                inputRange: [-50, 0],
-                outputRange: [0, -50],
+                inputRange: [0, 1, 2],
+                outputRange: [-50, 0, -50],
               }),
             },
           ],
@@ -118,36 +202,44 @@ function HomeReadNovel(props) {
         justifyContent={'space-around'}
         alignItems={'center'}
         zIndex={2}>
-        <Icon
-          onPress={() => {
-            if (currenPage.current > 0) {
-              flatListRef.current.scrollToIndex({
-                index: currenPage.current - 1,
-                animated: true,
-              });
-              currenPage.current = currenPage.current - 1;
-            }
-          }}
+        <CustomIcon
           name="arrow-back-circle"
           size={30}
-          color={currenPage.current > 0 ? '#000' : '#ccc'}
+          page={currenPage.current}
+          isNext={false}
+          changePage={changeCurrenPage}
+          dataLength={defaultData.length - 1}
         />
-        <Icon
-          onPress={() => {
-            if (currenPage.current < defaultData.length - 1) {
-              flatListRef.current.scrollToIndex({
-                index: currenPage.current + 1,
-                animated: true,
-              });
-              currenPage.current = currenPage.current + 1;
-            }
+        <IconBorder
+          name="settings"
+          size={30}
+          press={() => {
+            AnimationShowSetting();
+            defautlOffsetSetting.current = 0;
           }}
+        />
+        <CustomIcon
           name="arrow-forward-circle"
           size={30}
-          color={currenPage.current < defaultData.length - 1 ? '#000' : '#ccc'}
+          page={currenPage.current}
+          isNext={true}
+          changePage={changeCurrenPage}
+          dataLength={defaultData.length - 1}
         />
       </AnimatedView>
     </NativeBaseProvider>
   );
 }
-export default HomeReadNovel;
+export default connect(
+  state => ({
+    listChapter: state.data,
+  }),
+  dispatch => ({
+    changeCurrenPageRedux: page => {
+      dispatch({type: 'CHANGE_CURRENT_PAGE', payload: page});
+    },
+    changeChapTitle: value => {
+      dispatch({type: 'CHANGE_CHAP_TITLE', payload: value});
+    },
+  }),
+)(HomeReadNovel);

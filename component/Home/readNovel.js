@@ -1,13 +1,23 @@
 import React from 'react';
-import {NativeBaseProvider, View, ScrollView} from 'native-base';
+import {NativeBaseProvider, View, ScrollView, Button, Text} from 'native-base';
 import {ActivityIndicator, Dimensions} from 'react-native';
-import RenderHtml from 'react-native-render-html';
+import RenderHtml, {defaultSystemFonts} from 'react-native-render-html';
+
+const systemFonts = [
+  ...defaultSystemFonts,
+  'Times New Roman',
+  'Arial',
+  'TP Han Zi',
+];
 const screen = Dimensions.get('window');
 
 function ReadNovel(props) {
-  const [content, setContent] = React.useState('');
+  const content = React.useRef('');
   const [isLoading, setIsLoading] = React.useState(true);
+  const [fontFamily, setFontFamily] = React.useState('TP Han Zi');
+  const [backColor, setBackColor] = React.useState('#fff');
   const item = props.item; //chương
+  console.log('render', item.chapNum);
   React.useEffect(() => {
     let unmounted = true;
     setIsLoading(true);
@@ -17,7 +27,7 @@ function ReadNovel(props) {
       .then(res => res.json())
       .then(res => {
         if (unmounted) {
-          setContent(res.data);
+          content.current = res.data;
           setIsLoading(false);
         }
       })
@@ -35,24 +45,33 @@ function ReadNovel(props) {
     </View>
   ) : (
     <NativeBaseProvider>
-      <ScrollView w={screen.width} p={2} pr={3}>
+      <ScrollView
+        w={screen.width}
+        h={screen.height}
+        p={2}
+        pr={3}
+        bg={backColor}>
         <RenderHtml
           source={{
             html:
               `<h3>Chương ${item.chapNum}-${item.chapTitle}</h3>` +
-              content.content,
+              content.current.content,
           }}
           contentWidth={screen.width}
+          systemFonts={systemFonts}
+          enableExperimentalMarginCollapsing={true}
           tagsStyles={{
-            p: {
-              fontSize: 17,
-              color: '#000',
-              lineHeight: 20,
-            },
             h3: {
               fontSize: 25,
               color: '#000',
               fontWeight: 'bold',
+              marginTop: 10,
+            },
+            p: {
+              fontSize: 17,
+              color: '#000',
+              lineHeight: 20,
+              fontFamily: 'Arial',
             },
           }}
         />
@@ -60,4 +79,4 @@ function ReadNovel(props) {
     </NativeBaseProvider>
   );
 }
-export default ReadNovel;
+export default React.memo(ReadNovel);

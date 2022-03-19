@@ -2,6 +2,7 @@ import React from 'react';
 // import {View, StyleSheet, Text} from 'react-native';
 import {NativeBaseProvider, Text, View} from 'native-base';
 import {Dimensions} from 'react-native';
+import {connect} from 'react-redux';
 const screen = Dimensions.get('window');
 function HomeListChapterHeader(props) {
   return (
@@ -16,4 +17,6 @@ function HomeListChapterHeader(props) {
   );
 }
 
-export default HomeListChapterHeader;
+export default connect(state => ({
+  item: state.item,
+}))(HomeListChapterHeader);

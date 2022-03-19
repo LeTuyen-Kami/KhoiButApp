@@ -31,10 +31,10 @@ export default function HomeStack(props) {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
-        gestureEnabled: true,
-        gestureDirection: 'horizontal',
-        cardOverlayEnabled: true,
-        ...TransitionPresets.SlideFromRightIOS,
+        // gestureEnabled: true,
+        // gestureDirection: 'vertical',
+        // cardOverlayEnabled: true,
+        ...TransitionPresets.DefaultTransition,
       }}
       initialRouteName="HomeScreen">
       <Stack.Screen

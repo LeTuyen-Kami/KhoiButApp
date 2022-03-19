@@ -9,9 +9,7 @@ export function Chuong(props) {
         onPress={() => {
           props.navigation.navigate('HomeReadNovel', {
             item: props.item.chapNum,
-            data: props.data,
             slug: props.slug,
-            chitietTruyen: props.chitietTruyen,
           });
         }}>
         {({isPressed}) => {
